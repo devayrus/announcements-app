@@ -37,6 +37,8 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
+        protocol: ftp
+        port: 21
         server-dir: / # Ganti ini jika FTP Anda diarahkan ke public_html utama, misalnya: /public_html/pengumuman/
         exclude: |
           **/.git*
