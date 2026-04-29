@@ -35,8 +35,9 @@
                     <form action="{{ route('announcement.check', $announcement) }}" method="POST" class="space-y-4">
                         @csrf
                         <div class="group">
-                            <input type="text" name="nisn" required placeholder="Masukkan NISN Anda"
-                                class="w-full px-4 py-4 rounded-xl bg-white border border-[#e5e5e5] focus:outline-none focus:border-black focus:ring-4 focus:ring-black/5 transition-all font-medium text-lg tracking-widest placeholder:tracking-normal">
+                            <input type="text" name="nisn" required placeholder="Masukkan 10 digit NISN" maxlength="10"
+                                inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                class="w-full px-4 py-4 rounded-xl bg-white border border-[#e5e5e5] focus:outline-none focus:border-black focus:ring-4 focus:ring-black/5 transition-all font-medium text-lg tracking-[0.5em] placeholder:tracking-normal">
                             @error('nisn')
                                 <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                             @enderror

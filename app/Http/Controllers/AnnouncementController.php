@@ -36,7 +36,7 @@ class AnnouncementController extends Controller
     public function check(Request $request, Announcement $announcement)
     {
         $request->validate([
-            'nisn' => 'required|string',
+            'nisn' => 'required|string|size:10',
         ]);
 
         if (now()->lessThan($announcement->tanggal_buka)) {
