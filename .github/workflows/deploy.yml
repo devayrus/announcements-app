@@ -1,0 +1,47 @@
+name: Deploy Laravel to cPanel
+
+on:
+  push:
+    branches:
+      - main # Trigger deploy saat ada perubahan di branch main
+
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2' # Project Anda menggunakan PHP 8.2
+
+    - name: Install Composer Dependencies
+      run: composer install --no-dev --optimize-autoloader
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install NPM Dependencies & Build
+      run: |
+        npm install
+        npm run build
+
+    - name: Sync files to FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: / # Ganti ini jika FTP Anda diarahkan ke public_html utama, misalnya: /public_html/pengumuman/
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          tests/**
+          .env.example
+          README.md
