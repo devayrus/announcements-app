@@ -48,11 +48,13 @@ class ManageSettings extends Page implements HasForms
             ->components([
                 Section::make('Identitas Brand')
                     ->description('Atur nama dan logo yang muncul di navigasi atas')
+                    ->columns(2)
                     ->schema([
                         TextInput::make('brand_name')
                             ->label('Nama Brand')
                             ->placeholder('SMA Negeri 15 Bandung')
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->columnSpanFull(),
                         FileUpload::make('brand_logo')
                             ->label('Logo Brand')
                             ->image()
