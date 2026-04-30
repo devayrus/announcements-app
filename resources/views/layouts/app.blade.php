@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
-
+@php
+    $setting = \App\Models\Setting::first();
+@endphp
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Pengumuman Sekolah</title>
+    <title>{{ $setting->brand_name ?? 'Sistem Pengumuman Sekolah' }}</title>
+    @if($setting && $setting->favicon)
+        <link rel="icon" href="{{ asset('storage/' . $setting->favicon) }}">
+    @endif
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -190,10 +195,14 @@
     <nav class="h-16 border-b border-black/5 sticky top-0 bg-[#fffaf0]/80 backdrop-blur-md z-50">
         <div class="container mx-auto px-6 md:px-12 h-full flex items-center">
             <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                    <span class="text-white font-black text-xl leading-none">S</span>
-                </div>
-                <span class="font-display text-xl tracking-tight">SMA Negeri 15 Bandung</span>
+                @if($setting && $setting->brand_logo)
+                    <img src="{{ asset('storage/' . $setting->brand_logo) }}" alt="Logo" class="h-8 w-auto rounded-lg">
+                @else
+                    <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+                        <span class="text-white font-black text-xl leading-none">S</span>
+                    </div>
+                @endif
+                <span class="font-display text-xl tracking-tight">{{ $setting->brand_name ?? 'SMA Negeri 15 Bandung' }}</span>
             </div>
         </div>
     </nav>
@@ -205,10 +214,14 @@
     <footer class="border-t border-black/5 py-12 mt-12">
         <div class="container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-2 opacity-40">
-                <div class="w-5 h-5 bg-black rounded-md flex items-center justify-center text-[10px]">
-                    <span class="text-white font-black">S</span>
-                </div>
-                <span class="font-display text-sm tracking-tight">SMA Negeri 15 Bandung</span>
+                @if($setting && $setting->brand_logo)
+                    <img src="{{ asset('storage/' . $setting->brand_logo) }}" alt="Logo" class="h-5 w-auto grayscale rounded-md">
+                @else
+                    <div class="w-5 h-5 bg-black rounded-md flex items-center justify-center text-[10px]">
+                        <span class="text-white font-black">S</span>
+                    </div>
+                @endif
+                <span class="font-display text-sm tracking-tight">{{ $setting->brand_name ?? 'SMA Negeri 15 Bandung' }}</span>
             </div>
             <div class="text-[#9a9a9a] text-[13px] font-medium">
                 &copy; {{ date('Y') }}. Made with ❤️ by IT SMA Negeri 15 Bandung.
