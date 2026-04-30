@@ -17,9 +17,20 @@ class ManageSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
-    protected static ?string $navigationLabel = 'Pengaturan Tampilan';
-    protected static ?string $title = 'Pengaturan Tampilan';
+    public static function getNavigationIcon(): string | \BackedEnum | null
+    {
+        return 'heroicon-o-cog-6-tooth';
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return 'Pengaturan Tampilan';
+    }
+
+    public function getTitle(): string | \Illuminate\Contracts\Support\Htmlable
+    {
+        return 'Pengaturan Tampilan';
+    }
     
     protected string $view = 'filament.pages.manage-settings';
 
