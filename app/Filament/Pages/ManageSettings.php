@@ -42,10 +42,10 @@ class ManageSettings extends Page implements HasForms
         $this->form->fill($setting->toArray());
     }
 
-    public function form(Form $form): Form
+    public function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Identitas Brand')
                     ->description('Atur nama dan logo yang muncul di navigasi atas')
                     ->schema([
