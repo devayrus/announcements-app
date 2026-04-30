@@ -23,7 +23,7 @@ class AnnouncementResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'judul';
     
-    protected static ?string $navigationGroup = 'Sistem Pengumuman';
+    protected static string | \UnitEnum | null $navigationGroup = 'Sistem Pengumuman';
     
     protected static ?int $navigationSort = 1;
 

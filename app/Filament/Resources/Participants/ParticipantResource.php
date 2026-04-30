@@ -22,7 +22,7 @@ class ParticipantResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'nama';
     
-    protected static ?string $navigationGroup = 'Sistem Pengumuman';
+    protected static string | \UnitEnum | null $navigationGroup = 'Sistem Pengumuman';
     
     protected static ?int $navigationSort = 2;
 

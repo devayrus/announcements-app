@@ -27,7 +27,7 @@ class ManageSettings extends Page implements HasForms
         return 'Pengaturan Tampilan';
     }
 
-    public static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): string | \UnitEnum | null
     {
         return 'Pengaturan Website';
     }
