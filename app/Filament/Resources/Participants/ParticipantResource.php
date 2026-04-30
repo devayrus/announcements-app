@@ -21,6 +21,10 @@ class ParticipantResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'nama';
+    
+    protected static ?string $navigationGroup = 'Sistem Pengumuman';
+    
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {

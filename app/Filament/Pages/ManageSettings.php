@@ -27,6 +27,11 @@ class ManageSettings extends Page implements HasForms
         return 'Pengaturan Tampilan';
     }
 
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Pengaturan Website';
+    }
+
     public function getTitle(): string | \Illuminate\Contracts\Support\Htmlable
     {
         return 'Pengaturan Tampilan';
