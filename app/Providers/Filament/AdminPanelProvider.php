@@ -23,13 +23,26 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        try {
+            $setting = \App\Models\Setting::first();
+        } catch (\Exception $e) {
+            $setting = null;
+        }
+
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName($setting->brand_name ?? 'SMA Negeri 15 Bandung')
+            ->brandLogo($setting && $setting->brand_logo ? asset('storage/' . $setting->brand_logo) : null)
+            ->favicon($setting && $setting->favicon ? asset('storage/' . $setting->favicon) : null)
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->navigationGroups([
+                'Sistem Pengumuman',
+                'Pengaturan Website',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
