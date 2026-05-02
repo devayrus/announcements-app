@@ -6,10 +6,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $setting->brand_name ?? 'Sistem Pengumuman Sekolah' }}</title>
+    <title>{{ $setting->site_title ?? $setting->brand_name ?? 'Sistem Pengumuman Sekolah' }}</title>
     @if($setting && $setting->favicon)
         <link rel="icon" href="{{ asset('storage/' . $setting->favicon) }}">
     @endif
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $setting->site_title ?? $setting->brand_name ?? 'Sistem Pengumuman Sekolah' }}">
+    <meta property="og:description" content="{{ $setting->site_description ?? 'Halaman resmi pengumuman sekolah.' }}">
+    <meta property="og:image" content="{{ $setting && $setting->seo_image ? asset('storage/' . $setting->seo_image) : ($setting && $setting->brand_logo ? asset('storage/' . $setting->brand_logo) : '') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ $setting->site_title ?? $setting->brand_name ?? 'Sistem Pengumuman Sekolah' }}">
+    <meta property="twitter:description" content="{{ $setting->site_description ?? 'Halaman resmi pengumuman sekolah.' }}">
+    <meta property="twitter:image" content="{{ $setting && $setting->seo_image ? asset('storage/' . $setting->seo_image) : ($setting && $setting->brand_logo ? asset('storage/' . $setting->brand_logo) : '') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

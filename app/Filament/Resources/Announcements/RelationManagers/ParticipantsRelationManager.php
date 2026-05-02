@@ -21,6 +21,20 @@ class ParticipantsRelationManager extends RelationManager
         return $table
             ->headerActions([
                 CreateAction::make(),
+                Action::make('downloadTemplate')
+                    ->label('Download Template')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->color('info')
+                    ->action(function () {
+                        $headers = ['nisn', 'nama', 'kelas', 'keterangan'];
+                        $callback = function () use ($headers) {
+                            $file = fopen('php://output', 'w');
+                            fputcsv($file, $headers);
+                            fputcsv($file, ['1234567890', 'Ahmad Siswa', 'XII MIPA 1', 'LULUS']);
+                            fclose($file);
+                        };
+                        return response()->streamDownload($callback, 'template_impor_peserta.csv');
+                    }),
                 Action::make('importCsv')
                     ->label('Import CSV')
                     ->icon('heroicon-o-arrow-up-tray')
@@ -42,25 +56,47 @@ class ParticipantsRelationManager extends RelationManager
                             return;
                         }
 
-                        $rows = array_map('str_getcsv', file($path));
-                        $header = array_shift($rows);
+                        $handle = fopen($path, 'r');
+                        
+                        // Deteksi delimiter (koma atau titik koma)
+                        $firstLine = fgets($handle);
+                        $separator = (str_contains($firstLine, ';') && !str_contains($firstLine, ',')) ? ';' : ',';
+                        rewind($handle);
+
+                        // Ambil header dan bersihkan
+                        $header = fgetcsv($handle, 0, $separator);
+                        if ($header) {
+                            // Hapus BOM UTF-8 jika ada pada elemen pertama
+                            $header[0] = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $header[0]);
+                            $header = array_map(fn($h) => strtolower(trim($h)), $header);
+                        }
 
                         $count = 0;
-                        foreach ($rows as $row) {
+                        while (($row = fgetcsv($handle, 0, $separator)) !== false) {
+                            // Skip jika baris kosong
+                            if (count($row) === 1 && empty($row[0])) continue;
+                            
                             if (count($header) !== count($row)) continue;
                             
                             $record = array_combine($header, $row);
+                            $record = array_map('trim', $record);
+
+                            // Cari key nisn secara case-insensitive (sudah dilowercase di atas)
+                            $nisn = $record['nisn'] ?? null;
+
+                            if (!$nisn) continue;
 
                             $this->getOwnerRecord()->participants()->updateOrCreate(
-                                ['nisn' => $record['nisn']],
+                                ['nisn' => $nisn],
                                 [
-                                    'nama' => $record['nama'],
-                                    'kelas' => $record['kelas'],
-                                    'keterangan' => $record['keterangan'],
+                                    'nama' => $record['nama'] ?? $record['name'] ?? '',
+                                    'kelas' => $record['kelas'] ?? $record['class'] ?? '',
+                                    'keterangan' => $record['keterangan'] ?? $record['info'] ?? '',
                                 ]
                             );
                             $count++;
                         }
+                        fclose($handle);
 
                         Notification::make()
                             ->title($count . ' data berhasil diimport')

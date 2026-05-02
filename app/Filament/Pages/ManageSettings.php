@@ -61,10 +61,13 @@ class ManageSettings extends Page implements HasForms
                     ->columns(2)
                     ->schema([
                         TextInput::make('brand_name')
-                            ->label('Nama Brand')
+                            ->label('Nama Brand (Navigasi)')
                             ->placeholder('SMA Negeri 15 Bandung')
-                            ->maxLength(255)
-                            ->columnSpanFull(),
+                            ->maxLength(255),
+                        TextInput::make('site_title')
+                            ->label('Judul Website (Tab Browser)')
+                            ->placeholder('Sistem Pengumuman SMAN 15 Bandung')
+                            ->maxLength(255),
                         FileUpload::make('brand_logo')
                             ->label('Logo Brand')
                             ->image()
@@ -76,6 +79,19 @@ class ManageSettings extends Page implements HasForms
                             ->directory('settings')
                             ->maxSize(512)
                             ->helperText('Gambar kecil yang muncul di tab browser (rekomendasi: 32x32px)')
+                    ]),
+                Section::make('SEO & Metadata')
+                    ->description('Atur tampilan saat link website dibagikan ke WhatsApp atau Media Sosial')
+                    ->schema([
+                        TextInput::make('site_description')
+                            ->label('Deskripsi Website')
+                            ->placeholder('Halaman resmi pengumuman hasil seleksi/kelulusan SMA Negeri 15 Bandung.')
+                            ->maxLength(255),
+                        FileUpload::make('seo_image')
+                            ->label('Gambar Preview (OG Image)')
+                            ->image()
+                            ->directory('settings')
+                            ->helperText('Gambar yang muncul saat link dibagikan (Rekomendasi: 1200x630px)')
                     ])
             ])
             ->statePath('data');
