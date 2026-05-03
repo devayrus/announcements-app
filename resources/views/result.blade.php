@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    $setting = \App\Models\Setting::first();
+@endphp
+
 @section('content')
 <div class="mb-12">
     <a href="{{ route('home') }}" class="inline-flex items-center text-sm font-semibold text-[#6a6a6a] hover:text-black transition-colors">
