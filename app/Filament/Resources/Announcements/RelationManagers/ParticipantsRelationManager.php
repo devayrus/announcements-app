@@ -35,6 +35,32 @@ class ParticipantsRelationManager extends RelationManager
                         };
                         return response()->streamDownload($callback, 'template_impor_peserta.csv');
                     }),
+                Action::make('exportCsv')
+                    ->label('Export Data')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('success')
+                    ->action(function () {
+                        $participants = $this->getOwnerRecord()->participants;
+                        $headers = ['nisn', 'nama', 'kelas', 'keterangan'];
+                        
+                        $callback = function () use ($participants, $headers) {
+                            $file = fopen('php://output', 'w');
+                            fputcsv($file, $headers);
+                            
+                            foreach ($participants as $participant) {
+                                fputcsv($file, [
+                                    $participant->nisn,
+                                    $participant->nama,
+                                    $participant->kelas,
+                                    $participant->keterangan,
+                                ]);
+                            }
+                            fclose($file);
+                        };
+                        
+                        $filename = 'data_peserta_' . \Illuminate\Support\Str::slug($this->getOwnerRecord()->judul) . '.csv';
+                        return response()->streamDownload($callback, $filename);
+                    }),
                 Action::make('importCsv')
                     ->label('Import CSV')
                     ->icon('heroicon-o-arrow-up-tray')
